@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<accounts>
+	<account>
+		<id>1</id>
+		<username>admin</username>
+		<password>1q2w3e</password>
+		<status>2</status>
+		<session></session>
+		<roleId>1</roleId>	</account>
+	<account>
+		<id>2</id>
+		<username>user</username>
+		<password>123456789</password>
+		<status>1</status>
+		<session></session>
+		<roleId>2</roleId>	</account>
+</accounts>
