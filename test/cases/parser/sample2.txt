@@ -1,0 +1,7 @@
+<?php
+namespace Jojo\Popo;
+
+interface Gong {
+	public function running();
+}
+?>

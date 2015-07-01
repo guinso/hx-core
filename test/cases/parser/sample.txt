@@ -1,0 +1,7 @@
+<?php
+namespace Jojo\Koko;
+
+class Gem {
+	public function run() {}
+}
+?>

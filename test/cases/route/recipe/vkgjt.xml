@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<route>
+	<maps>
+		<!-- Default -->
+		<map>
+			<uri>/ccc</uri>
+			<method>get</method>
+			<function>ReFooBar</function>
+			<static>true</static>
+			<outputFormat>none</outputFormat>
+		</map>
+
+		<!-- Login log -->
+		<map>
+			<uri>/rte</uri>
+			<method>get</method>
+			<class>Rex</class>
+			<function>koko</function>
+			<static>true</static>
+			<outputFormat>json</outputFormat>
+		</map>
+		<map>
+			<uri>/qazxs</uri>
+			<method>get</method>
+			<class>Rex</class>
+			<function>gogo</function>
+			<static>true</static>
+			<outputFormat>json</outputFormat>
+		</map>
+	</maps>
+</route>
