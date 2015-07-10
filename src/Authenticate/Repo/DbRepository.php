@@ -3,10 +3,16 @@ namespace Hx\Authenticate\Repo;
 
 class DbRepository implements \Hx\Authenticate\RepositoryInterface {
 	
-	private $tableName, $sqlService, $selectSessionSql, $selectUsernameSql, $updateSql;
+	private $sqlService, $selectSessionSql, $selectUsernameSql, $updateSql;
 	
-	public function __construct(\Hx\Database\SqlServiceInterface $sqlService)
+	private $dbMapper;
+	
+	public function __construct(
+		\Hx\Database\SqlServiceInterface $sqlService, 
+		\Hx\Authenticate\Repo\DbMapperInterface $dbMapper)
 	{
+		$this->dbMapper = $dbMapper;
+		
 		$this->sqlService = $sqlService;
 		
 		$this->selectSessionSql = $sqlService->createSelectSql();
@@ -15,22 +21,20 @@ class DbRepository implements \Hx\Authenticate\RepositoryInterface {
 		
 		$this->updateSql = $sqlService->createUpdateSql();
 		
-		$this->tableName = 'account';
-		
 		$this->initSql();
 	}
 	
 	private function initSql()
 	{
 		$this->selectUsernameSql->reset()
-			->table($this->tableName)
+			->table($this->dbMapper->getTable())
 			->select('*')
-			->where('username = :username');
+			->where($this->dbMapper->getUsername() . ' = :username');
 		
 		$this->selectSessionSql->reset()
-			->table($this->tableName)
+			->table($this->dbMapper->getTable())
 			->select('*')
-			->where('session = :session');
+			->where($this->dbMapper->getSession() . ' = :session');
 	}
 	
 	public function getUser($username)
@@ -65,22 +69,22 @@ class DbRepository implements \Hx\Authenticate\RepositoryInterface {
 	private function createUser($row)
 	{
 		return new \Hx\Authenticate\User(
-			$row['username'], 
-			$row['password'], 
-			intval($row['status']),
-			$row['session'],
-			$row['id'],
-			$row['role_id']
+			$row[$this->dbMapper->getUsername()], 
+			$row[$this->dbMapper->getPassword()], 
+			intval($row[$this->dbMapper->getStatus()]),
+			$row[$this->dbMapper->getSession()],
+			$row[$this->dbMapper->getId()],
+			$row[$this->dbMapper->getRoleId()]
 		);
 	}
 	
 	public function updateStatus(\Hx\Authenticate\UserInterface $user)
 	{
 		$this->updateSql->reset()
-			->table($this->tableName)
-			->where('username = :username')
-			->column('status', ':status')
-			->column('session', ':session')
+			->table($this->dbMapper->getTable())
+			->where($this->dbMapper->getUsername() . ' = :username')
+			->column($this->dbMapper->getStatus(), ':status')
+			->column($this->dbMapper->getSession(), ':session')
 			->param(':username', $user->getUsername())
 			->param(':status', intval($user->getStatus()))
 			->param(':session', $user->getSession())

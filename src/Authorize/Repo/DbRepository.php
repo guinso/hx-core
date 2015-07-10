@@ -75,7 +75,7 @@ class DbRepository implements RepositoryInterface {
 		if (empty($row['id']))
 			return null;
 		else 
-			return new \Hx\Authorize\Permission(
+			return new \Hx\Authorize\Access(
 				$row['id'], 
 				$row['name'], 
 				$row['is_accessible'] == 1, 
