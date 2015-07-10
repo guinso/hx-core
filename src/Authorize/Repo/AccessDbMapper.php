@@ -18,14 +18,29 @@ class AccessDbMapper implements AccessDbMapperInterface {
 		$this->criteriaId = $criteriaId;
 	}
 	
-	public function getTable();
+	public function getTable()
+	{
+		return $this->table;
+	}
 	
-	public function getId();
+	public function getId()
+	{
+		return $this->id;
+	}
 	
-	public function getRoleId();
+	public function getRoleId()
+	{
+		return $this->roleId;
+	}
 	
-	public function getCanAccess();
+	public function getCanAccess()
+	{
+		return $this->canAccess;
+	}
 	
-	public function getCriteriaId();
+	public function getCriteriaId()
+	{
+		return $this->criteriaId;
+	}
 }
 ?>
