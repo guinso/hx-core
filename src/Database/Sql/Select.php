@@ -46,8 +46,8 @@ class Select implements SelectInterface {
 		//join
 		foreach ($this->join as $join) {
 			$sql .= ' ' .
-				$join['mode'] . ' ' . $join['table'] . ' ' .
-				$join['alias'] . ' ON ' . $join['condition'];
+				$join['mode'] . ' ' . $join['table'] . 
+				' ON ' . $join['condition'];
 		}
 	
 		//where

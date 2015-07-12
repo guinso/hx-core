@@ -10,6 +10,7 @@ class FiFileTest extends PHPUnit_Framework_TestCase {
 				DIRECTORY_SEPARATOR . 'dir-a' . DIRECTORY_SEPARATOR . 'dir-c' . DIRECTORY_SEPARATOR . 'sample-e.txt',
 				DIRECTORY_SEPARATOR . 'dir-a' . DIRECTORY_SEPARATOR . 'sample-c.txt',
 				DIRECTORY_SEPARATOR . 'dir-a' . DIRECTORY_SEPARATOR . 'sample-d.xml',
+				DIRECTORY_SEPARATOR . 'dir-b' . DIRECTORY_SEPARATOR . 'sample-e.txt',
 				DIRECTORY_SEPARATOR . 'sample-a.txt',
 				DIRECTORY_SEPARATOR . 'sample-b.tpl',
 			),
@@ -52,7 +53,7 @@ class FiFileTest extends PHPUnit_Framework_TestCase {
 			$counter++;
 		}, "/^.+\.txt$/");
 		
-		$this->assertEquals(3, $counter);
+		$this->assertEquals(4, $counter);
 	}
 }
 ?>

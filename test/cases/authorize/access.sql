@@ -30,13 +30,29 @@ DROP TABLE IF EXISTS `access_criteria`;
 CREATE TABLE `access_criteria` (
   `id` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
   `name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `group_id` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-INSERT INTO `access_criteria` (`id`, `name`) VALUES
-('A0000000001',	'view user'),
-('A0000000002',	'create user'),
-('A0000000003',	'update user');
+INSERT INTO `access_criteria` (`id`, `name`, `group_id`) VALUES
+('A0000000001',	'view user',	''),
+('A0000000002',	'create user',	''),
+('A0000000003',	'update user',	'');
+
+DROP TABLE IF EXISTS `account`;
+CREATE TABLE `account` (
+  `id` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `username` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `password` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `session` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `status` int(11) NOT NULL,
+  `role_id` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+INSERT INTO `account` (`id`, `username`, `password`, `session`, `status`, `role_id`) VALUES
+('A0000000001',	'user',	'123456789',	'ha45638bc2',	1,	'A0000000001'),
+('A0000000002',	'admin',	'123456789',	'ga563ab68c',	1,	'A0000000002');
 
 DROP TABLE IF EXISTS `role`;
 CREATE TABLE `role` (
@@ -50,4 +66,4 @@ INSERT INTO `role` (`id`, `name`) VALUES
 ('A0000000002',	'admin'),
 ('A0000000003',	'manager');
 
--- 2015-07-10 00:13:55
+-- 2015-07-12 05:24:13

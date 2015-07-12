@@ -30,13 +30,14 @@ DROP TABLE IF EXISTS `access_criteria`;
 CREATE TABLE `access_criteria` (
   `id` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
   `name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `group_id` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-INSERT INTO `access_criteria` (`id`, `name`) VALUES
-('A0000000001',	'view user'),
-('A0000000002',	'create user'),
-('A0000000003',	'update user');
+INSERT INTO `access_criteria` (`id`, `name`, `group_id`) VALUES
+('A0000000001',	'view user',	''),
+('A0000000002',	'create user',	''),
+('A0000000003',	'update user',	'');
 
 DROP TABLE IF EXISTS `account`;
 CREATE TABLE `account` (
@@ -46,9 +47,7 @@ CREATE TABLE `account` (
   `session` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
   `status` int(11) NOT NULL,
   `role_id` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `role_id` (`role_id`),
-  CONSTRAINT `account_ibfk_1` FOREIGN KEY (`role_id`) REFERENCES `role` (`id`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 INSERT INTO `account` (`id`, `username`, `password`, `session`, `status`, `role_id`) VALUES
@@ -75,7 +74,7 @@ INSERT INTO `email_queue` (`id`, `status`, `fail_cnt`, `last_update`, `guid`, `s
 ('A0000000001',	2,	0,	'2015-06-30',	'5387g43a8f',	'testing',	'this is sample message',	'a:1:{s:3:\"qwe\";s:11:\"qwe@zxc.com\";}',	'N;',	'N;',	'N;'),
 ('A0000000002',	1,	0,	'2015-06-30',	'627g3a456b7c',	'Kelopok',	'Kelopok sangat sedap.... ',	'a:1:{s:3:\"asd\";s:11:\"asd@abc.com\";}',	'N;',	'N;',	'N;'),
 ('A0000000003',	1,	0,	'2015-07-01',	'68g23a76f',	'gogogo',	'....',	'a:1:{s:3:\"asd\";s:11:\"asd@abc.com\";}',	'N;',	'N;',	'N;'),
-('A0000000004',	1,	0,	'2015-07-09',	'A0000000004',	'John mail',	'content.....',	'a:1:{s:4:\"john\";s:13:\"john@koko.net\";}',	'a:0:{}',	'a:0:{}',	'a:1:{s:17:\"sample attachment\";s:61:\"/Users/chingchetsiang/git/hx-core/test/cases/email/sample.txt\";}');
+('A0000000004',	1,	0,	'2015-07-12',	'A0000000004',	'John mail',	'content.....',	'a:1:{s:4:\"john\";s:13:\"john@koko.net\";}',	'a:0:{}',	'a:0:{}',	'a:1:{s:17:\"sample attachment\";s:61:\"/Users/chingchetsiang/git/hx-core/test/cases/email/sample.txt\";}');
 
 DROP TABLE IF EXISTS `key_value`;
 CREATE TABLE `key_value` (
@@ -120,4 +119,4 @@ INSERT INTO `schedule` (`id`, `class_name`, `function_name`, `description`, `sta
 ('A0000000002',	'SchScheduleTest',	'dupFile',	'duplicate sample file',	1,	'*',	'*',	'*',	'*',	'*'),
 ('A0000000003',	'SchScheduleTest',	'dupFile2',	'duplicate sample file',	1,	'*',	'*',	'*',	'*',	'*');
 
--- 2015-07-10 00:14:32
+-- 2015-07-12 05:22:08

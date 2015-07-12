@@ -1,22 +1,26 @@
 <?php 
 namespace Hx\Authorize\Repo;
 
-class DbRepository implements RepositoryInterface {
+class DbRepository implements \Hx\Authorize\RepositoryInterface {
 	
 	private $selectNameSql, $selectListSql;
-	private $tableName, $acessTableName, $userTableName;
+	private $userDbMapper, $accessDbMapper, $criteriaDbMapper;
 	
-	public function __construct(\Hx\Database\SqlServiceInterface $sqlService)
+	public function __construct(
+		\Hx\Database\SqlServiceInterface $sqlService,
+		\Hx\Authenticate\Repo\DbMapperInterface $userDbMapper,
+		\Hx\Authorize\Repo\AccessDbMapperInterface $accessDbMapper,
+		\Hx\Authorize\Repo\CriteriaDbMapperInterface $criteriaDbMapper)
 	{
 		$this->selectListSql = $sqlService->createSelectSql();
 		
 		$this->selectNameSql = $sqlService->createSelectSql();
 		
-		$this->tableName = 'access';
+		$this->userDbMapper = $userDbMapper;
 		
-		$this->acessTableName = 'function';
+		$this->accessDbMapper = $accessDbMapper;
 		
-		$this->userTableName = 'account';
+		$this->criteriaDbMapper = $criteriaDbMapper;
 		
 		$this->prepareSql();
 	}
@@ -24,19 +28,29 @@ class DbRepository implements RepositoryInterface {
 	private function prepareSql()
 	{
 		$this->selectNameSql->reset()
-			->table("{$this->tableName} a")
+			->table("{$this->accessDbMapper->getTable()} a")
 			->select('a.*')
-			->join('JOIN', "{$this->acessTableName} b", 'a.function_id = b.id')
-			->join('JOIN', "{$this->userTableName} c", 'a.role_id = c.role_id')
-			->where('b.name = :name')
-			->where('c.id = :userId');
+			->select("b.{$this->criteriaDbMapper->getName()} AS name")
+			->join('JOIN', 
+				"{$this->criteriaDbMapper->getTable()} b", 
+				"a.{$this->accessDbMapper->getCriteriaId()} = b.{$this->criteriaDbMapper->getId()}")
+			->join('JOIN', 
+				"{$this->userDbMapper->getTable()} c", 
+				"a.{$this->accessDbMapper->getRoleId()} = c.{$this->userDbMapper->getRoleId()}")
+			->where("b.{$this->criteriaDbMapper->getName()} = :name")
+			->where("c.{$this->userDbMapper->getId()} = :userId");
 		
 		$this->selectListSql->reset()
-			->table("{$this->tableName} a")
+			->table("{$this->accessDbMapper->getTable()} a")
 			->select("a.*")
-			->join('JOIN', "{$this->acessTableName} b", 'a.function_id = b.id')
-			->join('JOIN', "{$this->userTableName} c", 'a.role_id = c.role_id')
-			->where('c.id = :userId');
+			->select("b.{$this->criteriaDbMapper->getName()} AS name")
+			->join('JOIN', 
+				"{$this->criteriaDbMapper->getTable()} b", 
+				"a.{$this->accessDbMapper->getCriteriaId()} = b.{$this->criteriaDbMapper->getId()}")
+			->join('JOIN', 
+				"{$this->userDbMapper->getTable()} c", 
+				"a.{$this->accessDbMapper->getRoleId()} = c.{$this->userDbMapper->getRoleId()}")
+			->where("c.{$this->userDbMapper->getId()} = :userId");
 	}
 	
 	public function getByName($accessName, $userId)
@@ -76,10 +90,10 @@ class DbRepository implements RepositoryInterface {
 			return null;
 		else 
 			return new \Hx\Authorize\Access(
-				$row['id'], 
+				$row[$this->accessDbMapper->getId()], 
 				$row['name'], 
-				$row['is_accessible'] == 1, 
-				$row['role_id']
+				$row[$this->accessDbMapper->getCanAccess()] == 1, 
+				$row[$this->accessDbMapper->getRoleId()]
 			);
 	}
 }
