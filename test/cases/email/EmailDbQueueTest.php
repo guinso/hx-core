@@ -10,10 +10,27 @@ class EmailDbQueueTest extends PHPUnit_Framework_TestCase {
 		
 		$db = new \Hx\Database\SimpleDb($pdo);
 		
+		$tableName = 'email_queue';
+		$id = 'id';
+		$status = 'status';
+		$failCnt = 'fail_cnt';
+		$lastUpdate = 'last_update';
+		$guid = 'guid';
+		$subject = 'subject';
+		$msg = 'msg';
+		$tos = 'tos';
+		$ccs = 'ccs';
+		$bccs = 'bccs';
+		$attchs = 'attchs';
+		$mapper = new \Hx\Email\Queue\DbMapper(
+				$tableName, $id, $status, $failCnt, $lastUpdate, $guid,
+				$subject, $msg, $tos, $ccs, $bccs, $attchs);
+		
 		$queue = new \Hx\Email\Queue\DbQueue(
 			new \Hx\Database\SqlService($db), 
 			new \Hx\Database\Record\AlphaNumericId(
-				new \Hx\Database\Sql\Select($db), 'A', 10)
+				new \Hx\Database\Sql\Select($db), 'A', 10),
+			$mapper
 		);
 		
 		$item = $queue->getHead();
@@ -34,10 +51,27 @@ class EmailDbQueueTest extends PHPUnit_Framework_TestCase {
 		
 		$db = new \Hx\Database\SimpleDb($pdo);
 		
+		$tableName = 'email_queue';
+		$id = 'id';
+		$status = 'status';
+		$failCnt = 'fail_cnt';
+		$lastUpdate = 'last_update';
+		$guid = 'guid';
+		$subject = 'subject';
+		$msg = 'msg';
+		$tos = 'tos';
+		$ccs = 'ccs';
+		$bccs = 'bccs';
+		$attchs = 'attchs';
+		$mapper = new \Hx\Email\Queue\DbMapper(
+				$tableName, $id, $status, $failCnt, $lastUpdate, $guid,
+				$subject, $msg, $tos, $ccs, $bccs, $attchs);
+		
 		$queue = new \Hx\Email\Queue\DbQueue(
 				new \Hx\Database\SqlService($db),
 				new \Hx\Database\Record\AlphaNumericId(
-						new \Hx\Database\Sql\Select($db), 'A', 10)
+						new \Hx\Database\Sql\Select($db), 'A', 10),
+				$mapper
 		);
 		
 		$item = $queue->getHead();
@@ -66,10 +100,27 @@ class EmailDbQueueTest extends PHPUnit_Framework_TestCase {
 		
 		$db = new \Hx\Database\SimpleDb($pdo);
 		
+		$tableName = 'email_queue';
+		$id = 'id';
+		$status = 'status';
+		$failCnt = 'fail_cnt';
+		$lastUpdate = 'last_update';
+		$guid = 'guid';
+		$subject = 'subject';
+		$msg = 'msg';
+		$tos = 'tos';
+		$ccs = 'ccs';
+		$bccs = 'bccs';
+		$attchs = 'attchs';
+		$mapper = new \Hx\Email\Queue\DbMapper(
+				$tableName, $id, $status, $failCnt, $lastUpdate, $guid,
+				$subject, $msg, $tos, $ccs, $bccs, $attchs);
+		
 		$queue = new \Hx\Email\Queue\DbQueue(
 				new \Hx\Database\SqlService($db),
 				new \Hx\Database\Record\AlphaNumericId(
-						new \Hx\Database\Sql\Select($db), 'A', 10)
+						new \Hx\Database\Sql\Select($db), 'A', 10),
+				$mapper
 		);
 		
 		$queue->addTail(new \Hx\Email\Queue\Item(

@@ -4,14 +4,13 @@ namespace Hx\Email\Queue;
 class DbQueue implements QueueInterface {
 
 	private $sqlService, $nextIdService, $maxFailCount;
-	
-	private $tableName;
-	
-	private $select, $insert, $update;
+		
+	private $select, $insert, $update, $mapper;
 	
 	public function __construct(
 		\Hx\Database\SqlServiceInterface $sqlService,
-		\Hx\Database\Record\IdInterface $nextIdService)
+		\Hx\Database\Record\IdInterface $nextIdService,
+		\Hx\Email\Queue\DbMapperInterface $mapper)
 	{
 		$this->maxFailCount = 3;
 		
@@ -19,13 +18,13 @@ class DbQueue implements QueueInterface {
 		
 		$this->nextIdService = $nextIdService;
 		
-		$this->tableName = 'email_queue';
-		
 		$this->select = $this->sqlService->createSelectSql();
 		
 		$this->insert = $this->sqlService->createInsertSql();
 		
 		$this->update = $this->sqlService->createUpdateSql();
+		
+		$this->mapper = $mapper;
 	}
 	
 	public function addTail(ItemInterface $queueItem)
@@ -41,19 +40,19 @@ class DbQueue implements QueueInterface {
 		);
 		
 		$raw = $this->insert
-			->table($this->tableName)
-			->column('id', ':id')
-			->column('status', ':status')
-			->column('fail_cnt', ':failCnt')
-			->column('last_update', ':date')
-			->column('guid', ':guid')
-			->column('subject', ':subject')
-			->column('msg', ':msg')
-			->column('tos', ":tos")
-			->column('ccs', ':ccs')
-			->column('bccs', ':bccs')
-			->column('attchs', ':attchs')
-			->param(':id', $this->nextIdService->getNextId($this->tableName, 'id'))
+			->table($this->mapper->getTable())
+			->column($this->mapper->getId(), ':id')
+			->column($this->mapper->getStatus(), ':status')
+			->column($this->mapper->getFailCnt(), ':failCnt')
+			->column($this->mapper->getLastUpdate(), ':date')
+			->column($this->mapper->getGuid(), ':guid')
+			->column($this->mapper->getSubject(), ':subject')
+			->column($this->mapper->getMessage(), ':msg')
+			->column($this->mapper->getTos(), ":tos")
+			->column($this->mapper->getCcs(), ':ccs')
+			->column($this->mapper->getBccs(), ':bccs')
+			->column($this->mapper->getAttachments(), ':attchs')
+			->param(':id', $this->nextIdService->getNextId($this->mapper->getTable(), 'id'))
 			->param(':status', $queueItem->getStatus())
 			->param(':failCnt', $queueItem->getFailCount())
 			->param(':date', date('Y-m-d h:s:i'))
@@ -70,9 +69,9 @@ class DbQueue implements QueueInterface {
 	private function isExists(ItemInterface $queueItem)
 	{
 		$raw = $this->select->reset()
-			->table($this->tableName)
+			->table($this->mapper->getTable())
 			->select('*')
-			->where('guid = :guid')
+			->where("{$this->mapper->getGuid()} = :guid")
 			->param(':guid', $queueItem->getId())
 			->execute();
 		
@@ -84,10 +83,13 @@ class DbQueue implements QueueInterface {
 		$raw = $this->select->reset(
 				\Hx\Database\Sql\SelectInterface::RESET_PARAM |
 				\Hx\Database\Sql\SelectInterface::RESET_SQL)
-			->table($this->tableName)
+			->table($this->mapper->getTable())
 			->select('*')
-			->order('id')
-			->where("(status = 1 OR (status = 3 AND fail_cnt < :maxFailCnt))")
+			->order($this->mapper->getId())
+			->where("({$this->mapper->getStatus()} = 1 OR 
+				({$this->mapper->getStatus()} = 3 AND 
+				 {$this->mapper->getFailCnt()} < :maxFailCnt
+				))")
 			->param(':maxFailCnt', $this->maxFailCount)
 			->execute();
 		
@@ -99,16 +101,16 @@ class DbQueue implements QueueInterface {
 		{
 			return new \Hx\Email\Queue\Item(
 				new \Hx\Email\Mail(
-					unserialize($row['tos']),
-					unserialize($row['ccs']),
-					unserialize($row['bccs']),
-					$row['subject'],
-					$row['msg'],
-					unserialize($row['attchs'])
+					unserialize($row[$this->mapper->getTos()]),
+					unserialize($row[$this->mapper->getCcs()]),
+					unserialize($row[$this->mapper->getBccs()]),
+					$row[$this->mapper->getSubject()],
+					$row[$this->mapper->getMessage()],
+					unserialize($row[$this->mapper->getAttachments()])
 				), 
-				intval($row['status']), 
-				$row['id'], 
-				intval($row['fail_cnt'])
+				intval($row[$this->mapper->getStatus()]), 
+				$row[$this->mapper->getId()], 
+				intval($row[$this->mapper->getFailCnt()])
 			);
 		}
 	}
@@ -126,11 +128,11 @@ class DbQueue implements QueueInterface {
 			$this->update->reset(
 					\Hx\Database\Sql\UpdateInterface::RESET_PARAM |
 					\Hx\Database\Sql\UpdateInterface::RESET_SQL)
-				->table($this->tableName)
-				->where('id = :id')
-				->column('status', ':status')
-				->column('fail_cnt', ':failCnt')
-				->column('last_update', ':date')
+				->table($this->mapper->getTable())
+				->where("{$this->mapper->getId()} = :id")
+				->column($this->mapper->getStatus(), ':status')
+				->column($this->mapper->getFailCnt(), ':failCnt')
+				->column($this->mapper->getLastUpdate(), ':date')
 				->param(':id', $head->getId())
 				->param(':status', intval($queueItem->getStatus()))
 				->param(':failCnt', intval($queueItem->getFailCount()))
