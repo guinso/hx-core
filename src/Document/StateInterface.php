@@ -11,8 +11,10 @@ interface StateInterface {
 	
 	public function getDimension();
 	
-	public function getFone();
+	public function getFont();
 	
 	public function getLine();
+	
+	public function getBackgroundColor();
 }
 ?>

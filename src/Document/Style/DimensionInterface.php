@@ -17,7 +17,7 @@ interface DimensionInterface {
 	
 	public function getHeight();
 	
-	public function setHEight($value);
+	public function setHeight($value);
 	
 	public function reset();
 }

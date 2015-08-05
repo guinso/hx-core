@@ -27,7 +27,7 @@ class StateHandler implements \Hx\Document\StateHandlerInterface {
 	
 	public function push()
 	{
-		throw new \Hx\Document\DocumentException("not implement yet.");
+		throw new \Hx\Document\DocumentException("not implement initialize style objects yet.");
 		
 		//TODO allocate new style objects...
 		$newState = new \Hx\Document\State(

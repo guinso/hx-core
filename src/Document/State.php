@@ -3,13 +3,14 @@ namespace Hx\Document;
 
 class State implements \Hx\Document\StateInterface {
 	
-	private $margin, $padding, $dimension, $font, $line;
+	private $margin, $padding, $dimension, $font, $line, $backgroundColor;
 	
 	public function __construct(
 		\Hx\Document\Style\MarginInterface $margin,
 		\Hx\Document\Style\PaddingInterface $padding, 
 		\Hx\Document\Style\DimensionInterface $dimension,
-		\Hx\Document\Style\FontInterface $font) {
+		\Hx\Document\Style\FontInterface $font,
+		\Hx\Document\Style\RgbInterface $backgroundColor) {
 		
 		$this->margin = $margin;
 		
@@ -20,6 +21,8 @@ class State implements \Hx\Document\StateInterface {
 		$this->font = $font;
 		
 		$this->line = $line;
+		
+		$this->backgroundColor = $backgroundColor;
 	}
 	
 	public function reset()
@@ -58,6 +61,11 @@ class State implements \Hx\Document\StateInterface {
 	public function getLine()
 	{
 		return $this->line;
+	}
+	
+	public function getBackgroundColor()
+	{
+		return $this->backgroundColor;
 	}
 }
 ?>
