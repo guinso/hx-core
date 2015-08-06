@@ -25,6 +25,10 @@ class FiFileTest extends PHPUnit_Framework_TestCase {
 		
 		$result = $file->getDirectories($testRoot);
 		
+		sort($result['files'], SORT_STRING);
+		
+		sort($result['dirs'], SORT_STRING);
+		
 		$this->assertEquals($expected, $result);
 	}
 	
