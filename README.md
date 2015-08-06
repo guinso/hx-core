@@ -11,4 +11,4 @@ A PHP library inspired from onion architecture to solve:
 - Unit testable source code
 
 This library mainly focus on building backend web server. 
-It is possible to build full fledge web server with this library, however it is highly recommend build separate front end web server via other libraries (AngularJS, React, Backbone.js, etc.)
+It is possible to build full fledge web server with this library, however it is highly recommend build separate front end web server via other libraries such as AngularJS, React and Backbone.js.
