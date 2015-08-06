@@ -19,9 +19,9 @@ class HxUnitTestService {
 		if (empty($pdo))
 		{
 			self::$pdo = new PDO(
-				"mysql:dbname=php_unit_test;host=localhost;charset=utf8mb4", 
+				"mysql:dbname=phpunit;host=localhost;charset=utf8mb4", 
 				"root", 
-				"1q2w3e");
+				"123456789");
 			
 			self::$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 			
