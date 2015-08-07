@@ -29,16 +29,25 @@ class Font implements FontInterface {
 	
 	public function setFontStyle($fontStyle)
 	{
-		if ($fontStyle >= \Hx\Document\Style\FontInterface::STYLE_NORMAL && 
-			$fontStyle <= (
-				\Hx\Document\Style\FontInterface::STYLE_NORMAL |
-				\Hx\Document\Style\FontInterface::STYLE_BOLD |
-				\Hx\Document\Style\FontInterface::STYLE_ITALIC |
-				\Hx\Document\Style\FontInterface::STYLE_UNDERLINE))
+		if ($fontStyle >= $this->getMinimumFontStyleValue() && 
+			$fontStyle <= $this->getMaxinumFontStyleValue())
 			$this->style = $fontStyle;
 		else 
 			throw new \Hx\Document\DocumentException(
 				"Font style input not compliance: $fontStyle");
+	}
+	
+	private function getMinimumFontStyleValue()
+	{
+		return \Hx\Document\Style\FontInterface::STYLE_NORMAL;
+	}
+	
+	private function getMaxinumFontStyleValue()
+	{
+		return \Hx\Document\Style\FontInterface::STYLE_NORMAL |
+				\Hx\Document\Style\FontInterface::STYLE_BOLD |
+				\Hx\Document\Style\FontInterface::STYLE_ITALIC |
+				\Hx\Document\Style\FontInterface::STYLE_UNDERLINE;
 	}
 	
 	public function getFontSize()
@@ -48,11 +57,11 @@ class Font implements FontInterface {
 	
 	public function setFontSize($size)
 	{
-		if (is_int($size) === false)
+		if (is_int($size))
+			$this->size = $size;
+		else
 			throw new \Hx\Document\DocumentException(
 				"Font size value is not integer: $size");
-		else
-			$this->size = $size;
 	}
 	
 	public function getFontColor()
