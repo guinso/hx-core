@@ -21,7 +21,8 @@ trait ElementTrait {
 		if ($i != -1)
 			$this->removeChildByIndex($index);
 		else
-			Throw new \Hx\Document\DocumentException("Remove child rejected, there is no mtching child found.");
+			Throw new \Hx\Document\DocumentException(
+				"Remove child rejected, there is no mtching child found.");
 	}
 	
 	public function removeChildByIndex($index)
@@ -31,7 +32,8 @@ trait ElementTrait {
 		if ($count > $index)
 			$this->tags = array_splice($this->tags, $index, 1);
 		else
-			Throw new \Hx\Document\DocumentException("Remove child rejected, index $index is not in range.");
+			Throw new \Hx\Document\DocumentException(
+				"Remove child rejected, index $index is not in range.");
 	}
 }
 ?>

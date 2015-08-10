@@ -3,13 +3,11 @@ namespace Hx\Document\Component;
 
 interface ElementInterface {
 	
-	public function getDimension();
+	public function calculateBoxSize();
 	
-	public function render();
+	public function render(\Hx\Document\Engine\PdfEngineInterface $pdfEngine);
 	
-	public function getName();
-	
-	public function addChild(\Hx\Document\Component\ElementInterface $element);
+	public function getElementName();
 	
 	public function removeChild(\Hx\Document\Component\ElementInterface $element);
 	

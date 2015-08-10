@@ -1,5 +1,5 @@
 <?php 
-namespace Hx\Document;
+namespace Hx\Document\Engine;
 
 interface PdfEngineInterface {
 	
