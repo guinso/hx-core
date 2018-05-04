@@ -4,12 +4,15 @@ namespace Hx\IocContainer;
 
 class IocContainer implements IocContainerInterface {
 	private $rules, $serviceInstances;
+	private $rootDir;
 	
-	public function __construct(Array $rules)
+	public function __construct(Array $rules, $rootDirectory)
 	{
 		$this->cloneRules($rules);
 		
 		$this->serviceInstances = array();
+
+		$this->rootDir = $rootDirectory;
 	}
 	
 	private function cloneRules(Array $rules)
@@ -59,7 +62,7 @@ class IocContainer implements IocContainerInterface {
 			{
 				$function = $rule->getClosure();
 				
-				$object = $function($this);
+				$object = $function($this, $this->rootDir);
 			}
 			else 
 			{
