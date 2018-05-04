@@ -248,6 +248,8 @@ class XmlRuleLoader implements \Hx\IocContainer\RuleLoaderInterface {
 	
 	private function castClosure($code)
 	{
+		return eval("return $code;");
+		/*
 		return eval(
 			'return ' . 
 			mb_ereg_replace(
@@ -256,7 +258,7 @@ class XmlRuleLoader implements \Hx\IocContainer\RuleLoaderInterface {
 				$code
 			) . 
 			';'
-		);
+		);*/
 	}
 	
 	private function validateNodeService(\SimpleXMLElement $tag, $filePath)
